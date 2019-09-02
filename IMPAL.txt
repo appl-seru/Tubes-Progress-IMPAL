@@ -1,0 +1,94 @@
+CREATE TABLE KANTIN (
+
+nama_kantin VARCHAR2(100) NOT NULL,
+Lokasi_kantin VARCHAR2(200) NOT NULL,
+id_kantin VARCHAR2(5) NOT NULL,
+no_telp_kantin VARCHAR2(50) NOT NULL,
+
+CONSTRAINT PK_KANTIN PRIMARY KEY (id_kantin)
+
+);
+
+
+CREATE TABLE ADMIN_(
+
+id_admin VARCHAR2(10) NOT NULL,
+nama_ad VARCHAR2(100) NOT NULL,
+no_telp_ad VARCHAR2(100) NOT NULL,
+alamat_ad VARCHAR2(100) NOT NULL,
+
+CONSTRAINT PK_ADMIN PRIMARY KEY (id_admin)
+
+);
+
+
+CREATE TABLE CUSTOMER (
+
+id_cus VARCHAR2(10) NOT NULL,
+Nama_cus VARCHAR2(100) NOT NULL,
+lokasi_cus VARCHAR2(100) NOT NULL,
+no_telp_cus VARCHAR2(20) NOT NULL,
+
+CONSTRAINT PK_CUSTOMER PRIMARY KEY (id_cus)
+);
+
+CREATE TABLE REGISTRASI
+(
+id_registrasi VARCHAR2(10) NOT NULL,
+nama_user VARCHAR2(20) NOT NULL,
+username VARCHAR2(100) NOT NULL,
+no_telp VARCHAR2(50) NOT NULL,
+katasandi VARCHAR2(50) NOT NULL,
+lokasi VARCHAR2(100) NOT NULL,
+id_kantin VARCHAR2(5) NOT NULL,
+id_admin VARCHAR2(10) NOT NULL,
+
+CONSTRAINT PK_REGISTRASI PRIMARY KEY (id_registrasi),
+CONSTRAINT fk_admin_regis FOREIGN KEY (id_admin) REFERENCES ADMIN_(id_admin)
+);
+
+
+CREATE TABLE PEMBAYARAN(
+
+id_pembayaran VARCHAR2(10) NOT NULL,
+Harga_total VARCHAR2(100) NOT NULL,
+id_admin VARCHAR2(10) NOT NULL,
+
+CONSTRAINT PK_PEMBAYARAN PRIMARY KEY (id_pembayaran),
+CONSTRAINT FK_BAYAR_ADMIN FOREIGN KEY (id_admin) REFERENCES ADMIN_(id_admin),
+);
+
+CREATE TABLE PEMESANAN
+(
+id_pemesanan VARCHAR2(10) NOT NULL,
+jumlah_item VARCHAR2(100) NOT NULL,
+nama_item VARCHAR2(30) NOT NULL,
+harga_item VARCHAR2(75) NOT NULL,
+id_pembayaran VARCHAR2(10) NOT NULL,
+
+CONSTRAINT PK_PEMESANAN PRIMARY KEY (id_pemesanan),
+CONSTRAINT FK_PEMBAYARAN UNIQUE FOREIGN KEY (id_pembayaran) REFERENCES PEMBAYARAN (id_pembayaran)
+);
+
+
+CREATE TABLE USER_KANTIN_REGIS (
+id_user_kantin_regis VARCHAR2(10) NOT NULL,
+id_kantin VARCHAR2(5) NOT NULL,
+id_registrasi VARCHAR2(10) NOT NULL,
+
+CONSTRAINT pk_id_user_kantin_regis PRIMARY KEY (id_user_kantin_regis),
+CONSTRAINT fk1_user_kantin FOREIGN KEY(id_kantin) REFERENCES kantin(id_kantin),
+CONSTRAINT fk2_user_registrasi FOREIGN KEY (id_registrasi) REFERENCES registrasi(id_registrasi)
+);
+
+CREATE TABLE USER_CUST_REGIS (
+id_user_cust_regis VARCHAR2(10) NOT NULL,
+id_registrasi VARCHAR2(10) NOT NULL,
+id_cus VARCHAR2(10) NOT NULL,
+
+CONSTRAINT pk_id_user_cust_regis PRIMARY KEY(id_user_cust_regis),
+CONSTRAINT fk1_user_registrasi FOREIGN KEY (id_registrasi) REFERENCES registrasi(id_registrasi),
+CONSTRAINT fk2_user_cust FOREIGN KEY(id_cus) REFERENCES customer(id_cus)
+);
+
+COMMIT;
